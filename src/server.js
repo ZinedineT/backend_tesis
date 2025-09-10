@@ -11,6 +11,7 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
 const checkoutRoutes = require('./routes/checkout');
+const adminRoutes = require('./routes/admin');
 
 // Middleware para webhooks - debe venir antes de express.json()
 app.use('/api/checkout/webhooks/stripe', 
@@ -47,7 +48,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/checkout', checkoutRoutes);
-
+app.use('/api/admin', adminRoutes);
 
 // Manejar rutas no encontradas (404)
 app.use( (req, res) => {
