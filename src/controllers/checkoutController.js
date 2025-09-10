@@ -146,6 +146,7 @@ const handleStripeWebhook = async (req, res) => {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    console.log('Webhook verificado correctamente:', event.type);
   } catch (err) {
     console.error('⚠️ Error de verificación de webhook:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -153,6 +154,7 @@ const handleStripeWebhook = async (req, res) => {
 
   // Manejar el evento checkout.session.completed
   if (event.type === 'checkout.session.completed') {
+    console.log('Procesando checkout.session.completed...');
     const session = event.data.object;
 
     try {

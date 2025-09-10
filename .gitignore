@@ -68,3 +68,5 @@ Thumbs.db
 pids
 *.pid
 *.seed
+
+/example.js

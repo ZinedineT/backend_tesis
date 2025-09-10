@@ -10,17 +10,33 @@ const app = express();
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
+const checkoutRoutes = require('./routes/checkout');
 
+// Middleware para webhooks - debe venir antes de express.json()
+app.use('/api/checkout/webhooks/stripe', 
+  express.raw({ type: 'application/json' }),
+  (req, res, next) => {
+    // Guardar el raw body para que esté disponible en el controller
+    req.rawBody = req.body;
+    req.body = {}; // Limpiar el body parsed para evitar confusiones
+    next();
+  }
+);
 
 // Middlewares
-app.use(cors({ origin: process.env.FRONTEND_URL })); // Permite requests desde tu frontend
-app.use(express.json()); // Permite leer bodies en formato JSON
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials:true })); // Permite requests desde tu frontend
+app.use(express.json({limit: '10mb'})); // Permite leer bodies en formato JSON
 
 // Conectar a MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI,{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => console.log('✅ Conectado a MongoDB Atlas'))
-  .catch((error) => console.error('❌ Error conectando a la DB:', error));
-
+  .catch((error) => {
+    console.error('❌ Error conectando a la DB:', error);
+    process.exit(1);
+});
 // Ruta de prueba simple para verificar que el servidor funciona
 app.get('/api/test', (req, res) => {
   res.json({ message: '¡El backend está funcionando!' });
@@ -30,6 +46,8 @@ app.get('/api/test', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/checkout', checkoutRoutes);
+
 
 // Manejar rutas no encontradas (404)
 app.use( (req, res) => {
@@ -43,7 +61,7 @@ app.use((error, req, res, next) => {
 });
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor escuchando en el puerto ${PORT}`);
 });
