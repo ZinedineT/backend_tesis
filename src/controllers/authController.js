@@ -1,24 +1,33 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
+const { validationResult } = require('express-validator');
 
 // Registrar nuevo usuario
 const register = async (req, res) => {
   try {
+    // Verificar errores de validación
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'Datos de usuario inválidos.',
+        errors: errors.array()
+      });
+    }
     const { name, email, password } = req.body;
 
     // Validaciones básicas
     if (!name || !email || !password) {
-      return res.status(400).json({ 
-        message: 'Nombre, email y contraseña son requeridos.' 
+      return res.status(400).json({
+        message: 'Nombre, email y contraseña son requeridos.'
       });
     }
 
     // Verificar si el usuario ya existe
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ 
-        message: 'El usuario ya existe con este email.' 
+      return res.status(409).json({
+        message: 'El usuario ya existe con este email.'
       });
     }
 
@@ -38,10 +47,10 @@ const register = async (req, res) => {
 
     // Generar token JWT
     const token = jwt.sign(
-      { 
-        userId: savedUser._id, 
+      {
+        userId: savedUser._id,
         email: savedUser.email,
-        role: savedUser.role 
+        role: savedUser.role
       },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
@@ -61,8 +70,8 @@ const register = async (req, res) => {
 
   } catch (error) {
     console.error('Error en register:', error);
-    res.status(500).json({ 
-      message: 'Error del servidor al registrar usuario.' 
+    res.status(500).json({
+      message: 'Error del servidor al registrar usuario.'
     });
   }
 };
@@ -70,37 +79,45 @@ const register = async (req, res) => {
 // Login de usuario
 const login = async (req, res) => {
   try {
+    // Verificar errores de validación
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'Datos de login inválidos.',
+        errors: errors.array()
+      });
+    }
     const { email, password } = req.body;
 
     // Validaciones básicas
     if (!email || !password) {
-      return res.status(400).json({ 
-        message: 'Email y contraseña son requeridos.' 
+      return res.status(400).json({
+        message: 'Email y contraseña son requeridos.'
       });
     }
 
     // Buscar usuario por email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ 
-        message: 'Credenciales inválidas.' 
+      return res.status(401).json({
+        message: 'Credenciales inválidas.'
       });
     }
 
     // Verificar contraseña
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
-      return res.status(401).json({ 
-        message: 'Credenciales inválidas.' 
+      return res.status(401).json({
+        message: 'Credenciales inválidas.'
       });
     }
 
     // Generar token JWT
     const token = jwt.sign(
-      { 
-        userId: user._id, 
+      {
+        userId: user._id,
         email: user.email,
-        role: user.role 
+        role: user.role
       },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
@@ -120,8 +137,8 @@ const login = async (req, res) => {
 
   } catch (error) {
     console.error('Error en login:', error);
-    res.status(500).json({ 
-      message: 'Error del servidor al iniciar sesión.' 
+    res.status(500).json({
+      message: 'Error del servidor al iniciar sesión.'
     });
   }
 };
@@ -135,8 +152,8 @@ const getProfile = async (req, res) => {
     });
   } catch (error) {
     console.error('Error en getProfile:', error);
-    res.status(500).json({ 
-      message: 'Error del servidor al obtener perfil.' 
+    res.status(500).json({
+      message: 'Error del servidor al obtener perfil.'
     });
   }
 };

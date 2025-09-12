@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El título es requerido'],
     trim: true,
-    maxlength: [100, 'El título no puede exceder 100 caracteres']
+    maxlength: [200, 'El título no puede exceder 100 caracteres']
   },
   description: {
     type: String,

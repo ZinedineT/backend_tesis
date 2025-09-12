@@ -1,3 +1,5 @@
+// En ../middleware/validation.js - MODIFICA ESTE ARCHIVO
+
 const { body, validationResult } = require('express-validator');
 
 const handleValidationErrors = (req, res, next) => {
@@ -11,11 +13,41 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
+// Validación SOLO para registro
+const registerValidation = [
+  body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Debe ser un email válido'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('La contraseña debe tener al menos 6 caracteres'),
+  body('name')
+    .trim()
+    .isLength({ min: 2, max: 50 })
+    .withMessage('El nombre debe tener entre 2 y 50 caracteres'),
+  handleValidationErrors
+];
+
+// Validación SOLO para login (solo email y password)
+const loginValidation = [
+  body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Debe ser un email válido'),
+  body('password')
+    .isLength({ min: 1 })
+    .withMessage('La contraseña es requerida'),
+  handleValidationErrors
+];
+
 const productValidation = [
   body('title')
-    .isLength({ min: 3, max: 100 })
-    .withMessage('El título debe tener entre 3 y 100 caracteres'),
+    .trim()
+    .isLength({ min: 3, max: 200 })
+    .withMessage('El título debe tener entre 3 y 200 caracteres'),
   body('description')
+    .trim()
     .isLength({ min: 10, max: 1000 })
     .withMessage('La descripción debe tener entre 10 y 1000 caracteres'),
   body('price')
@@ -24,21 +56,16 @@ const productValidation = [
   body('stock')
     .isInt({ min: 0 })
     .withMessage('El stock debe ser un número entero positivo'),
-  handleValidationErrors
-];
-
-const userValidation = [
-  body('email')
-    .isEmail()
-    .withMessage('Debe ser un email válido'),
-  body('password')
-    .isLength({ min: 6 })
-    .withMessage('La contraseña debe tener al menos 6 caracteres'),
+  body('category')
+    .trim()
+    .notEmpty()
+    .withMessage('La categoría es requerida'),
   handleValidationErrors
 ];
 
 module.exports = {
   productValidation,
-  userValidation,
+  registerValidation, // Cambiado de userValidation
+  loginValidation,    // Nueva validación para login
   handleValidationErrors
 };
