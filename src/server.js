@@ -12,18 +12,23 @@ const productRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
 const checkoutRoutes = require('./routes/checkout');
 const adminRoutes = require('./routes/admin');
+const orderRoutes = require('./routes/orders');
 
 // Middleware para webhooks - debe venir antes de express.json()
-app.use('/api/checkout/webhooks/stripe', 
+// app.use('/api/checkout/webhooks/stripe',
+//   express.raw({ type: 'application/json' }),
+//   (req, res, next) => {
+//     // Guardar el raw body para que esté disponible en el controller
+//     req.rawBody = req.body;
+//     req.body = {}; // Limpiar el body parsed para evitar confusiones
+//     next();
+//   }
+// );
+// ⚠️ Webhook de Stripe - debe ir ANTES de express.json()
+app.post('/api/checkout/webhooks/stripe',
   express.raw({ type: 'application/json' }),
-  (req, res, next) => {
-    // Guardar el raw body para que esté disponible en el controller
-    req.rawBody = req.body;
-    req.body = {}; // Limpiar el body parsed para evitar confusiones
-    next();
-  }
+  require('./controllers/checkoutController').handleStripeWebhook
 );
-
 // Middlewares
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials:true })); // Permite requests desde tu frontend
 app.use(express.json({limit: '10mb'})); // Permite leer bodies en formato JSON
@@ -49,6 +54,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Manejar rutas no encontradas (404)
 app.use( (req, res) => {

@@ -7,7 +7,7 @@ const Product = require('../models/Product.model');
 const createCheckoutSession = async (req, res) => {
   try {
     const { shippingAddress } = req.body;
-    
+
     // Obtener el carrito del usuario
     const cart = await Cart.findOne({
       userId: req.user._id,
@@ -23,7 +23,7 @@ const createCheckoutSession = async (req, res) => {
     // Verificar stock y precios actuales
     for (const item of cart.items) {
       const product = await Product.findById(item.productId._id);
-      
+
       if (!product) {
         return res.status(404).json({
           message: `Producto ${item.productId.title} no encontrado.`
@@ -136,13 +136,15 @@ const getOrderStatus = async (req, res) => {
 
 // Webhook handler para Stripe
 const handleStripeWebhook = async (req, res) => {
+  console.log('🔔 Webhook recibido');
+
   const sig = req.headers['stripe-signature'];
   let event;
 
   try {
     // Verificar la firma del webhook
     event = stripe.webhooks.constructEvent(
-      req.rawBody, // Necesitamos el raw body para verificar la firma
+      req.body,
       sig,
       process.env.STRIPE_WEBHOOK_SECRET
     );
@@ -180,7 +182,7 @@ const handleStripeWebhook = async (req, res) => {
         // Limpiar carrito del usuario
         await Cart.findOneAndUpdate(
           { userId: order.userId, status: 'active' },
-          { 
+          {
             items: [],
             status: 'converted'
           }
