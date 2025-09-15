@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
     city: String,
     postalCode: String,
     country: String
+  },
+    isActive: {
+    type: Boolean,
+    default: true
   }
 }, {
   timestamps: true 

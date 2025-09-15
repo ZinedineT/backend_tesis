@@ -186,11 +186,91 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
+// Actualizar estado de usuario (activar/desactivar)
+const updateUserStatus = async (req, res) => {
+  try {
+    const { isActive } = req.body;
+    
+    // No permitir desactivar a uno mismo
+    if (req.params.id === req.user._id.toString()) {
+      return res.status(400).json({ 
+        message: 'No puedes desactivar tu propia cuenta.' 
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { isActive },
+      { new: true, runValidators: true }
+    ).select('-passwordHash');
+
+    if (!user) {
+      return res.status(404).json({ 
+        message: 'Usuario no encontrado.' 
+      });
+    }
+
+    res.json({
+      message: `Usuario ${isActive ? 'activado' : 'desactivado'} exitosamente.`,
+      user
+    });
+  } catch (error) {
+    console.error('Error en updateUserStatus:', error);
+    
+    if (error.name === 'CastError') {
+      return res.status(400).json({ 
+        message: 'ID de usuario inválido.' 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: 'Error del servidor al actualizar usuario.' 
+    });
+  }
+};
+
+// Eliminar usuario
+const deleteUser = async (req, res) => {
+  try {
+    // No permitir eliminarse a uno mismo
+    if (req.params.id === req.user._id.toString()) {
+      return res.status(400).json({ 
+        message: 'No puedes eliminar tu propia cuenta.' 
+      });
+    }
+
+    const user = await User.findByIdAndDelete(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ 
+        message: 'Usuario no encontrado.' 
+      });
+    }
+
+    res.json({
+      message: 'Usuario eliminado exitosamente.'
+    });
+  } catch (error) {
+    console.error('Error en deleteUser:', error);
+    
+    if (error.name === 'CastError') {
+      return res.status(400).json({ 
+        message: 'ID de usuario inválido.' 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: 'Error del servidor al eliminar usuario.' 
+    });
+  }
+};
 
 module.exports = {
   getAllOrders,
   getOrderById,
   updateOrderStatus,
   getDashboardStats,
-  getAllUsers
+  getAllUsers,
+  updateUserStatus,    
+  deleteUser  
 };

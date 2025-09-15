@@ -4,9 +4,18 @@ const {
   getAllOrders,
   getOrderById,
   updateOrderStatus,
+  updateUserStatus,
+  deleteUser,
   getDashboardStats,
   getAllUsers
 } = require('../controllers/adminController');
+const {
+  getProducts,
+  getCategories,git 
+  createProduct,
+  updateProduct,
+  deleteProduct
+} = require('../controllers/productController');
 const { authMiddleware, adminMiddleware } = require('../middleware/authMiddleware');
 
 // Todas las rutas requieren autenticación y ser admin
@@ -20,7 +29,15 @@ router.put('/orders/:id', updateOrderStatus);
 
 // Rutas de usuarios
 router.get('/users', getAllUsers);
+router.put('/users/:id/status', updateUserStatus); 
+router.delete('/users/:id', deleteUser);  
 
+// Rutas de productos (admin)
+router.get('/products', getProducts);
+router.get('/products/categories', getCategories);
+router.post('/products', createProduct);
+router.put('/products/:id', updateProduct);
+router.delete('/products/:id', deleteProduct);
 // Rutas de dashboard
 router.get('/stats', getDashboardStats);
 
