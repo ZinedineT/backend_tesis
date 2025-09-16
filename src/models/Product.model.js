@@ -31,7 +31,7 @@ const productSchema = new mongoose.Schema({
   },
   images: [{
     type: String,
-    match: [/https?:\/\/.+/, 'La URL de la imagen debe ser válida']
+    // match: [/https?:\/\/.+/, 'La URL de la imagen debe ser válida']
   }],
   category: {
     type: String,

@@ -159,14 +159,28 @@ const getAllUsers = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
+    const role = req.query.role; 
+    const search = req.query.search; 
 
-    const users = await User.find()
+        // ↓↓↓ AGREGA ESTOS FILTROS ↓↓↓
+    let filter = {};
+    if (role && role !== 'all') {
+      filter.role = role;
+    }
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const users = await User.find(filter)
       .select('-passwordHash')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    const totalUsers = await User.countDocuments();
+    const totalUsers = await User.countDocuments(filter);
     const totalPages = Math.ceil(totalUsers / limit);
 
     res.json({

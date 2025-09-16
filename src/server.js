@@ -1,5 +1,6 @@
 // backend/src/server.js
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config(); // Carga las variables del archivo .env
@@ -55,6 +56,8 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/orders', orderRoutes);
+// Agrega esta línea para servir archivos estáticos:
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Manejar rutas no encontradas (404)
 app.use( (req, res) => {
