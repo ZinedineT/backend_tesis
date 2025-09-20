@@ -37,8 +37,8 @@ router.put('/orders/:id', updateOrderStatus);
 
 // Rutas de usuarios
 router.get('/users', getAllUsers);
-router.put('/users/:id/status', updateUserStatus); 
-router.delete('/users/:id', deleteUser);  
+router.put('/users/:id/status', updateUserStatus);
+router.delete('/users/:id', deleteUser);
 
 // Rutas de productos (admin)
 router.get('/products', getProducts);

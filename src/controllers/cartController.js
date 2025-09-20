@@ -245,11 +245,55 @@ const mergeCart = async (req, res) => {
     });
   }
 };
+// Actualizar solo la cantidad de un producto en el carrito
+const updateQuantity = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { quantity } = req.body;
+
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({ message: 'Cantidad inválida' });
+    }
+
+    const cart = await Cart.findOne({
+      userId: req.user._id,
+      status: 'active'
+    });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Carrito no encontrado' });
+    }
+
+    const item = cart.items.find(
+      (i) => i.productId.toString() === productId
+    );
+
+    if (!item) {
+      return res.status(404).json({ message: 'Producto no está en el carrito' });
+    }
+
+    // Actualiza cantidad
+    item.quantity = quantity;
+
+    await cart.save();
+    await cart.populate('items.productId', 'title price images');
+
+    res.json({
+      message: 'Cantidad actualizada',
+      cart
+    });
+  } catch (error) {
+    console.error('Error en updateQuantity:', error);
+    res.status(500).json({ message: 'Error del servidor al actualizar cantidad' });
+  }
+};
+
 
 module.exports = {
   getCart,
   addToCart,
   removeFromCart,
+  updateQuantity,
   clearCart,
   mergeCart
 };

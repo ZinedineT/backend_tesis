@@ -11,7 +11,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Impresoras',
-    images: ['/api/uploads/Impresora-RPT004.png']
+    images: ['/uploads/Impresora-RPT004.png']
   },
   {
     title: 'Impresora térmica CBX POS-89E - 80MM - USB y Ethernet',
@@ -20,7 +20,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Impresoras',
-    images: ['/api/uploads/Impresora-ZD220.png']
+    images: ['/uploads/Impresora-ZD220.png']
   },
   {
     title: 'Impresora de Código de Barras ZEBRA - ZD220 - 1D Y 2D - USB',
@@ -29,7 +29,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Impresoras',
-    images: ['/api/uploads/Impresora-ZD220.png']
+    images: ['/uploads/Impresora-ZD220.png']
   },
 
   // LECTORES DE CÓDIGO DE BARRAS
@@ -40,7 +40,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Lectores',
-    images: ['/api/uploads/Lector-SC050.png']
+    images: ['/uploads/Lector-SC050.png']
   },
   {
     title: 'Lector De Código De Barras POS-D - PRO SCAN - 1D/2D - USB - Laser S/Base',
@@ -49,7 +49,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Lectores',
-    images: ['/api/uploads/Lector-PROSCAN.png']
+    images: ['/uploads/Lector-PROSCAN.png']
   },
   {
     title: 'Lector De Código De Barras CBX - I-1915 - 1D - USB - Laser C/Base',
@@ -58,7 +58,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Lectores',
-    images: ['/api/uploads/Lector-CBX.png']
+    images: ['/uploads/Lector-CBX.png']
   },
   {
     title: 'Lector De Código De Barras 3nSTAR - SCI150-1 - 1D - USB - Imager/Base',
@@ -67,7 +67,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Lectores',
-    images: ['/api/uploads/Lector-SCI150.png']
+    images: ['/uploads/Lector-SCI150.png']
   },
   {
     title: 'Lector De Código De Barras 3nSTAR - SC100-1 - 1D - USB - Laser C/Base',
@@ -76,7 +76,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Lectores',
-    images: ['/api/uploads/Lector-SCI100.png']
+    images: ['/uploads/Lector-SCI100.png']
   },
 
   // GAVETAS CAJA DE DINERO
@@ -87,7 +87,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Gavetas',
-    images: ['/api/uploads/Gaveta-CASH330.png']
+    images: ['/uploads/Gaveta-CASH330.png']
   },
   {
     title: 'Gaveta de dinero 3NSTAR CD350 LARGE - 41x42x10CM - 5 compartimientos',
@@ -96,7 +96,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Gavetas',
-    images: ['/api/uploads/Gaveta-CD350.png']
+    images: ['/uploads/Gaveta-CD350.png']
   },
 
   // SUMINISTROS
@@ -107,7 +107,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Suministros',
-    images: ['/api/uploads/PAPEL-CONTOMETRO.png']
+    images: ['/uploads/PAPEL-CONTOMETRO.png']
   },
   {
     title: 'Papel Contómetro Térmico 80mm x 80mm - Caja de 20',
@@ -116,7 +116,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Suministros',
-    images: ['/api/uploads/PAPEL-CONTOMETRO.png']
+    images: ['/uploads/PAPEL-CONTOMETRO.png']
   },
   {
     title: 'Papel Contómetro Térmico 80mm x 80mm - Caja de 10',
@@ -125,7 +125,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Suministros',
-    images: ['/api/uploads/PAPEL-CONTOMETRO.png']
+    images: ['/uploads/PAPEL-CONTOMETRO.png']
   },
   {
     title: 'Etiquetas de papel TT - Rollo x 3000 - 5cm x 2.5cm',
@@ -134,7 +134,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Suministros',
-    images: ['/api/uploads/Etiqueta-adhesiva.png']
+    images: ['/uploads/Etiqueta-adhesiva.png']
   },
   {
     title: 'Etiquetas de papel TT- Rollo x 6000 - 3cm x 2cm',
@@ -143,7 +143,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Suministros',
-    images: ['/api/uploads/Etiqueta-adhesiva.png']
+    images: ['/uploads/Etiqueta-adhesiva.png']
   },
   {
     title: 'Cinta de cera - 110mm - 74mt.',
@@ -152,7 +152,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Suministros',
-    images: ['/api/uploads/Cinta-Cera.png']
+    images: ['/uploads/Cinta-Cera.png']
   },
 
   // COMPUTADORAS
@@ -163,7 +163,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Computadoras',
-    images: ['/api/uploads/PackCompleto.png']
+    images: ['/uploads/PackCompleto.png']
   },
 
   // PACKS
@@ -174,7 +174,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Packs',
-    images: ['/api/uploads/PackImpresoraCBX-CASH330.png']
+    images: ['/uploads/PackImpresoraCBX-CASH330.png']
   },
   {
     title: 'Pack: Impresora 3NSTAR RPT004 + Gaveta CASH330',
@@ -183,7 +183,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Packs',
-    images: ['/api/uploads/PackImpresoraRPT004-CASH330.png']
+    images: ['/uploads/PackImpresoraRPT004-CASH330.png']
   },
   {
     title: 'Pack: Impresora CBX POS-89E + Gaveta CASH330 + Lector SC050',
@@ -192,7 +192,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Packs',
-    images: ['/api/uploads/PackImpresoraCBX-SC050.png']
+    images: ['/uploads/PackImpresoraCBX-SC050.png']
   },
   {
     title: 'Pack: Impresora 3NSTAR RPT004 + Gaveta CASH330 + Lector SC050',
@@ -201,7 +201,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Packs',
-    images: ['/api/uploads/PackImpresoraRPT004-CASH330-SC050.png']
+    images: ['/uploads/PackImpresoraRPT004-CASH330-SC050.png']
   },
   {
     title: 'Pack: Gaveta CASH330 + Lector SC050',
@@ -210,7 +210,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Packs',
-    images: ['/api/uploads/PackGaveta330-SC050.png']
+    images: ['/uploads/PackGaveta330-SC050.png']
   },
   {
     title: 'Pack: Gaveta CASH330 + Lector PRO SCAN',
@@ -219,7 +219,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Packs',
-    images: ['/api/uploads/PackGaveta330-PROSCAN.png']
+    images: ['/uploads/PackGaveta330-PROSCAN.png']
   },
   {
     title: 'Pack Completo: Computadora + Impresora + Gaveta + Lector',
@@ -228,7 +228,7 @@ const sampleProducts = [
     currency: 'PEN',
     stock: 10,
     category: 'Packs',
-    images: ['/api/uploads/PackCompleto.png']
+    images: ['/uploads/PackCompleto.png']
   },
 ];
 

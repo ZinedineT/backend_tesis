@@ -4,6 +4,7 @@ const {
   getCart,
   addToCart,
   removeFromCart,
+  updateQuantity,
   clearCart,
   mergeCart
 } = require('../controllers/cartController');
@@ -17,5 +18,6 @@ router.post('/', addToCart);
 router.delete('/:productId', removeFromCart);
 router.delete('/', clearCart);
 router.post('/merge', mergeCart);
+router.put('/item/:productId', updateQuantity);
 
 module.exports = router;
