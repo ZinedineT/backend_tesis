@@ -1,12 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const router = express.Router();
-const storage = multer.diskStorage({
-  destination: './uploads/',
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
+const { storage } = require('../config/cloudinary');
 const upload = multer({ storage });
 const {
   getAllOrders,
@@ -50,7 +45,7 @@ router.delete('/products/:id', deleteProduct);
 router.get('/stats', getDashboardStats);
 // Agrega esta línea con las demás rutas:
 router.post('/upload', upload.single('image'), (req, res) => {
-  res.json({ imageUrl: `/uploads/${req.file.filename}` });
+  res.json({ imageUrl: req.file.path});
 });
 
 module.exports = router;
