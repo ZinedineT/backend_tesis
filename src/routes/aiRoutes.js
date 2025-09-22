@@ -1,27 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const aiController = require('../controllers/aiController');
-const authMiddleware = require('../middleware/authMiddleware'); // Ajusta la ruta
+const {authMiddleware} = require('../middleware/authMiddleware'); // Ajusta tu ruta
 
-// Ruta para análisis de imagen (protegida)
+// Analizar imagen (base64)
 router.post('/analyze-image', authMiddleware, aiController.analyzeImage);
 
-// Ruta para recomendaciones basadas en texto
-router.post('/recommend-products', authMiddleware, aiController.recommendProducts);
+// Recomendar productos desde imagen (endpoint principal)
+router.post('/recommend-from-image', authMiddleware, aiController.recommendFromImage);
 
-// Ruta de prueba de conexión con Ollama
-router.get('/test', async (req, res) => {
+// Recomendar productos desde texto
+router.post('/recommend-from-text', authMiddleware, aiController.recommendFromText);
+
+// Ruta de salud de la IA
+router.get('/health', async (req, res) => {
   try {
     const { Ollama } = require('ollama');
     const ollama = new Ollama({ host: 'http://localhost:11434' });
     
     const models = await ollama.list();
     res.json({ 
-      status: 'Ollama conectado correctamente',
-      models: models.models 
+      status: '✅ IA conectada correctamente',
+      model: 'llava:latest',
+      available: true,
+      models: models.models.map(m => m.name)
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ 
+      status: '❌ IA no disponible',
+      error: error.message 
+    });
   }
 });
 
