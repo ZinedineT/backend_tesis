@@ -14,6 +14,8 @@ const cartRoutes = require('./routes/cart');
 const checkoutRoutes = require('./routes/checkout');
 const adminRoutes = require('./routes/admin');
 const orderRoutes = require('./routes/orders');
+// Después de tus otras rutas, agrega:
+const aiRoutes = require('./routes/aiRoutes');
 
 // Middleware para webhooks - debe venir antes de express.json()
 // app.use('/api/checkout/webhooks/stripe',
@@ -56,6 +58,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/ai', aiRoutes);
 // Agrega esta línea para servir archivos estáticos:
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 

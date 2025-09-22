@@ -23,6 +23,7 @@
     "mongoose": "^8.18.1",
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
+    "ollama": "^0.5.18",
     "stripe": "^18.5.0"
   },
   "devDependencies": {
