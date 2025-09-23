@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const aiController = require('../controllers/aiController');
-const {authMiddleware} = require('../middleware/authMiddleware'); // Ajusta tu ruta
+const {authMiddleware} = require('../middleware/authMiddleware');
+const { uploadSingleImage, handleUploadErrors } = require('../middleware/uploadMiddleware'); // Ajusta tu ruta
 
 // Analizar imagen (base64)
 router.post('/analyze-image', authMiddleware, aiController.analyzeImage);
@@ -11,6 +12,14 @@ router.post('/recommend-from-image', authMiddleware, aiController.recommendFromI
 
 // Recomendar productos desde texto
 router.post('/recommend-from-text', authMiddleware, aiController.recommendFromText);
+
+// Agregar después de las rutas existentes:
+router.post('/analyze-upload', 
+  authMiddleware, 
+  uploadSingleImage, 
+  handleUploadErrors, 
+  aiController.analyzeUploadedImage 
+);
 
 // Ruta de salud de la IA
 router.get('/health', async (req, res) => {
