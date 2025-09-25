@@ -62,6 +62,6 @@ const orderSchema = new mongoose.Schema({
 // Índices para búsquedas eficientes
 orderSchema.index({ userId: 1, createdAt: -1 });
 orderSchema.index({ paymentStatus: 1 });
-orderSchema.index({ stripeSessionId: 1 });
+// orderSchema.index({ stripeSessionId: 1 });
 
 module.exports = mongoose.model('Order', orderSchema);

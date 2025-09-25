@@ -33,14 +33,15 @@ app.post('/api/checkout/webhooks/stripe',
   require('./controllers/checkoutController').handleStripeWebhook
 );
 // Middlewares
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials:true })); // Permite requests desde tu frontend
-app.use(express.json({limit: '10mb'})); // Permite leer bodies en formato JSON
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials:true }));  
+app.use(express.json({limit: '10mb'}));
 
-// Conectar a MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI,{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+// Conectar a MongoDB Atlas con useNewUrlParser y useUnifiedTopology pero funciona igual sin ellos
+// mongoose.connect(process.env.MONGODB_URI,{
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// })
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Conectado a MongoDB Atlas'))
   .catch((error) => {
     console.error('❌ Error conectando a la DB:', error);
