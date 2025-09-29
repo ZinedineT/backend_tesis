@@ -117,13 +117,127 @@ const updateOrderStatus = async (req, res) => {
 // Obtener estadísticas
 const getDashboardStats = async (req, res) => {
   try {
+    const { range = 'month' } = req.query;
+    // Calcular fechas según el rango
+    const now = new Date();
+    let startDate = new Date();
+    
+    switch (range) {
+      case 'week':
+        startDate.setDate(now.getDate() - 7);
+        break;
+      case 'month':
+        startDate.setMonth(now.getMonth() - 1);
+        break;
+      case 'year':
+        startDate.setFullYear(now.getFullYear() - 1);
+        break;
+      case 'all':
+        startDate = new Date(0); // Desde el inicio
+        break;
+      default:
+        startDate.setMonth(now.getMonth() - 1);
+    }
     const totalUsers = await User.countDocuments();
     const totalProducts = await Product.countDocuments();
     const totalOrders = await Order.countDocuments();
-    
+
+    // Top productos
+    const topProducts = await Order.aggregate([
+      { 
+        $match: { 
+          paymentStatus: 'paid',
+          createdAt: { $gte: startDate }
+        } 
+      },
+      { $unwind: '$items' },
+      { 
+        $group: { 
+          _id: '$items.productId', 
+          totalSold: { $sum: '$items.quantity' },
+          revenue: { $sum: { $multiply: ['$items.price', '$items.quantity'] } }
+        } 
+      },
+      { $sort: { totalSold: -1 } },
+      { $limit: 5 },
+      { 
+        $lookup: { 
+          from: 'products', 
+          localField: '_id', 
+          foreignField: '_id', 
+          as: 'product' 
+        } 
+      },
+      { $unwind: '$product' },
+      { 
+        $project: { 
+          _id: 1, 
+          totalSold: 1, 
+          revenue: 1,
+          'product.title': 1, 
+          'product.images': 1 
+        } 
+      }
+    ]);
+
+    // Tendencia de usuarios
+    const userTrend = await User.aggregate([
+      {
+        $match: { createdAt: { $gte: startDate } }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: range === 'year' ? '%Y-%m' : '%Y-%m-%d',
+              date: '$createdAt'
+            }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
     const totalRevenue = await Order.aggregate([
-      { $match: { paymentStatus: 'paid' } },
+      { $match: { paymentStatus: 'paid', createdAt: { $gte: startDate } } },
       { $group: { _id: null, total: { $sum: '$total' } } }
+    ]);
+
+        // Datos para gráfico de ingresos por período
+    const revenueData = await Order.aggregate([
+      {
+        $match: {
+          paymentStatus: 'paid',
+          createdAt: { $gte: startDate }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: range === 'year' ? '%Y-%m' : '%Y-%m-%d',
+              date: '$createdAt'
+            }
+          },
+          revenue: { $sum: '$total' },
+          orders: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+
+    // Órdenes por estado
+    const ordersByStatus = await Order.aggregate([
+      {
+        $match: { createdAt: { $gte: startDate } }
+      },
+      {
+        $group: {
+          _id: '$paymentStatus',
+          count: { $sum: 1 }
+        }
+      }
     ]);
 
     const recentOrders = await Order.find({ paymentStatus: 'paid' })
@@ -141,6 +255,12 @@ const getDashboardStats = async (req, res) => {
         totalProducts,
         totalOrders,
         totalRevenue: totalRevenue[0]?.total || 0
+      },
+      charts:{
+        revenueData,
+        ordersByStatus,
+        userTrend,
+        topProducts
       },
       recentOrders,
       lowStockProducts
