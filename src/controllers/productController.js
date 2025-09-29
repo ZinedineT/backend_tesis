@@ -89,8 +89,17 @@ const createProduct = async (req, res) => {
         errors: errors.array()
       });
     }
-
-    const product = new Product(req.body);
+    // Extraer URLs de Cloudinary si se subieron archivos
+    let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      imageUrls = req.files.map(file => file.path); // path es la URL segura en Cloudinary
+    }
+    // Combinar body + imágenes
+    const productData = {
+      ...req.body,
+      images: imageUrls.length ? imageUrls : req.body.images // por si también envías links manuales
+    };
+    const product = new Product(productData);
     const savedProduct = await product.save();
 
     res.status(201).json({
@@ -117,6 +126,14 @@ const createProduct = async (req, res) => {
 // Actualizar un producto (solo admin)
 const updateProduct = async (req, res) => {
   try {
+    let imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      imageUrls = req.files.map(file => file.path);
+    }
+    const updateData = {
+      ...req.body,
+      ...(imageUrls.length ? { images: imageUrls } : {})
+    };
     // Verificar errores de validación
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -127,7 +144,7 @@ const updateProduct = async (req, res) => {
     }
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     );
 

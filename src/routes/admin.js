@@ -38,8 +38,14 @@ router.delete('/users/:id', deleteUser);
 // Rutas de productos (admin)
 router.get('/products', getProducts);
 router.get('/products/categories', getCategories);
-router.post('/products', createProduct);
-router.put('/products/:id', updateProduct);
+// router.post('/products', createProduct);
+router.post(
+  '/products',
+  upload.array('images', 5), // hasta 5 imágenes, ajusta a tu gusto
+  createProduct
+);
+// router.put('/products/:id', updateProduct);
+router.put('/products/:id', upload.array('images', 5), updateProduct);
 router.delete('/products/:id', deleteProduct);
 // Rutas de dashboard
 router.get('/stats', getDashboardStats);
